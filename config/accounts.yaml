@@ -1,0 +1,13 @@
+
+#OAuth tokens and key for Engagement API.
+engagement_api:
+
+  #API key/secret
+  consumer_key: 
+  consumer_secret: 
+  #Access token/secret
+  access_token: 
+  access_token_secret: 
+
+  app_id:  #Not used in code, but useful troubleshooting information.
+
