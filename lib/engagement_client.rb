@@ -451,28 +451,33 @@ class EngagementClient
 	  end
 	  output += "\n \nNumber of Tweets: \t #{@tweet_ids.length} \n \n"
 	  output += "Engagement Type #{extra_spaces} \t Total \n"
-	  top_tweets["totals"].each { |totals_by_type|
+	  
+	  if @max_top_tweets > 0
+	  
+		 top_tweets["totals"].each { |totals_by_type|
+   
+			if @endpoint != 'totals' or (@endpoint == 'totals' and TOTALS_ENGAGEMENT_TYPES.include?(totals_by_type['type']))
+			   output += "#{totals_by_type['type'].capitalize} #{extra_spaces}\t #{extra_spaces} #{totals_by_type['count'].to_s} \n"
+			end
+		 }
+   
+		 output += "\n \nTop Tweets \n \n"
+   
+		 #Top Tweets output.
+		 top_tweets["top_tweets"].each { |top_tweets_by_type|
+   
+			if @endpoint != 'totals' or (@endpoint == 'totals' and TOTALS_ENGAGEMENT_TYPES.include?(top_tweets_by_type['type']))
+   
+			   output += "Top Tweets for #{top_tweets_by_type['type']}: \t #{top_tweets_by_type['type'].capitalize} \t Tweet links:\n"
+   
+			   top_tweets_by_type["tweets"].each { |top_tweet|
+				  output += "#{top_tweet["id"]}#{extra_spaces} \t #{top_tweet["count"].to_s} #{extra_spaces}\t https://twitter.com/lookup/status/#{top_tweet["id"]}\n" unless top_tweet["count"] == 0
+			   }
+			   output += "\n"
+			end
+		 }
 
-		 if @endpoint != 'totals' or (@endpoint == 'totals' and TOTALS_ENGAGEMENT_TYPES.include?(totals_by_type['type']))
-			output += "#{totals_by_type['type'].capitalize} #{extra_spaces}\t #{extra_spaces} #{totals_by_type['count'].to_s} \n"
-		 end
-	  }
-
-	  output += "\n \nTop Tweets \n \n"
-
-	  #Top Tweets output.
-	  top_tweets["top_tweets"].each { |top_tweets_by_type|
-
-		 if @endpoint != 'totals' or (@endpoint == 'totals' and TOTALS_ENGAGEMENT_TYPES.include?(top_tweets_by_type['type']))
-
-			output += "Top Tweets for #{top_tweets_by_type['type']}: \t #{top_tweets_by_type['type'].capitalize} \t Tweet links:\n"
-
-			top_tweets_by_type["tweets"].each { |top_tweet|
-			   output += "#{top_tweet["id"]}#{extra_spaces} \t #{top_tweet["count"].to_s} #{extra_spaces}\t https://twitter.com/lookup/status/#{top_tweet["id"]}\n" unless top_tweet["count"] == 0
-			}
-			output += "\n"
-		 end
-	  }
+	  end
 	  
 	  output += "\n \nNumber of requests: #{@num_requests} \nProcess took #{format('%.01f', process_duration/60)} minutes."
 
@@ -547,8 +552,8 @@ class EngagementClient
 			end_date = nil #Let API default to Now.
 		 end
 
-		 @start_date = start_date.to_s if not @start_date.nil?
-		 @end_date = end_date.to_s if not @end_date.nil?
+		 @start_date = start_date.to_s
+		 @end_date = end_date.to_s if not end_date.nil?
 
 	  end
    end
