@@ -13,7 +13,8 @@ class EngagementClient
    MAX_TWEETS_PER_REQUEST_28HR = 25
    MAX_TWEETS_PER_REQUEST_HISTORICAL = 25
    MAX_HISTORICAL_DAYS = 28
-   TOTALS_ENGAGEMENT_TYPES = ['favorites', 'replies', 'retweets']
+   TOTALS_ENGAGEMENT_TYPES = ['retweets', 'favorites', 'replies']
+   HISTORICAL_METRIC_DATE_LIMIT = '2015-09-01' #Before which ['retweets', 'favorites', 'replies'] are not available.
 
    REQUEST_SLEEP_IN_SECONDS = 10 #Sleep this long with hitting request rate limit.
 
@@ -75,7 +76,7 @@ class EngagementClient
 
 	  @save_api_responses = true
 
-	  @@request_num = 0 #used to serialize api response files.
+	  @@request_num = 0 #Used to count requests for session summary.
 	  @outbox = './output'
 	  @name_based_folders = false
 
@@ -86,6 +87,93 @@ class EngagementClient
 	  @uri_path = "/insights/engagement/#{@endpoint}"
 	  @rate_limit_requests = 6
 	  @rate_limit_seconds = 60
+   end
+
+   def set_account_config(file)
+
+	  begin
+		 keys = YAML::load_file(file)
+		 @keys = keys['engagement_api']
+	  rescue
+		 puts "Error trying to load account settings. Could not parse account YAML file. Quitting."
+		 @keys = nil
+	  end
+   end
+
+   def set_settings_config(file)
+
+	  begin
+		 settings = {}
+		 settings = YAML::load_file(file)
+	  rescue
+		 puts "Error trying to load app settings. Could not parse settings YAML file. Quitting."
+		 settings = nil
+	  end
+
+	  #Now parse contents and load separate attributes.
+
+	  begin
+
+		 @name = settings['engagement_settings']['name']
+
+		 @endpoint = settings['engagement_settings']['endpoint'] #What endpoint are we hitting?
+
+		 @inbox = settings['engagement_settings']['inbox'] #Where the Tweets are coming from.
+		 @outbox = settings['engagement_settings']['outbox']
+		 @name_based_folders = settings['engagement_settings']['name_based_folders']
+
+		 @rate_limit_requests = settings['engagement_settings']['rate_limit_requests']
+		 @rate_limit_seconds = settings['engagement_settings']['rate_limit_seconds']
+
+		 @max_top_tweets = settings['engagement_settings']['max_top_tweets']
+
+		 @start_date = settings['engagement_settings']['start']
+		 @end_date = settings['engagement_settings']['end']
+
+		 @engagement_types = settings['engagement_types']
+		 @groupings = settings['engagement_groupings']
+
+		 @verbose = settings['engagement_settings']['verbose']
+
+		 @save_ids = settings['engagement_settings']['save_ids']
+		 @request_resources = settings['engagement_settings']['request_resources']
+		 @save_api_responses = settings['engagement_settings']['save_api_responses']
+
+	  rescue
+		 puts "Error loading settings. Check settings."
+	  end
+
+	  #Create folders if they do not exist.
+	  if (!File.exist?(@inbox))
+		 Dir.mkdir(@inbox)
+	  end
+
+	  if (!File.exist?("#{@inbox}/processed"))
+		 Dir.mkdir("#{@inbox}/processed")
+	  end
+
+	  if (!File.exist?(@outbox))
+		 Dir.mkdir(@outbox)
+	  end
+
+	  if @name_based_folders
+
+		 if (!File.exist?("#{@outbox}/#{@name}"))
+			Dir.mkdir("#{@outbox}/#{@name}")
+		 end
+
+		 if (!File.exist?("#{@outbox}/#{@name}/metrics"))
+			Dir.mkdir("#{@outbox}/#{@name}/metrics")
+		 end
+
+		 @outbox = "#{@outbox}/#{@name}"
+
+	  else
+		 if (!File.exist?("#{@outbox}/metrics"))
+			Dir.mkdir("#{@outbox}/metrics")
+		 end
+	  end
+
    end
 
    def get_api_access
@@ -124,14 +212,28 @@ class EngagementClient
 	  end
    end
 
-
 =begin
 	  {top_tweets[]: { "type", tweets[{"id", "count"}] }
 	  totals[]: { "type", "count"}] }
 	  }
 =end
 
+=begin | By Tweet results that determine Top tweets.
+{
+    "by_tweet_type": {
+        "657814465384071168": {
+            "engagements": "0",
+            "impressions": "24884"
+        },
+        "658837741438799873": {
+            "engagements": "0",
+            "impressions": "24905"
+        }
+    }
+}
+=end
 
+   #Dynamically build data structure based on configured Engagement Types.
    def build_top_tweets_hash
 
 	  tweet = {}
@@ -277,110 +379,6 @@ class EngagementClient
 	  end
 
    end
-
-
-   def set_account_config(file)
-
-	  begin
-		 keys = YAML::load_file(file)
-		 @keys = keys['engagement_api']
-	  rescue
-		 puts "Error trying to load account settings. Could not parse account YAML file. Quitting."
-		 @keys = nil
-	  end
-   end
-
-   def set_settings_config(file)
-
-	  begin
-		 settings = {}
-		 settings = YAML::load_file(file)
-	  rescue
-		 puts "Error trying to load app settings. Could not parse settings YAML file. Quitting."
-		 settings = nil
-	  end
-
-	  #Now parse contents and load separate attributes.
-
-	  begin
-
-		 @name = settings['engagement_settings']['name']
-
-		 @endpoint = settings['engagement_settings']['endpoint'] #What endpoint are we hitting?
-
-		 @inbox = settings['engagement_settings']['inbox'] #Where the Tweets are coming from.
-		 @outbox = settings['engagement_settings']['outbox']
-		 @name_based_folders = settings['engagement_settings']['name_based_folders']
-
-		 @rate_limit_requests = settings['engagement_settings']['rate_limit_requests']
-		 @rate_limit_seconds = settings['engagement_settings']['rate_limit_seconds']
-
-		 @max_top_tweets = settings['engagement_settings']['max_top_tweets']
-
-		 @start_date = settings['engagement_settings']['start']
-		 @end_date = settings['engagement_settings']['end']
-
-		 @engagement_types = settings['engagement_types']
-		 @groupings = settings['engagement_groupings']
-
-		 @verbose = settings['engagement_settings']['verbose']
-
-		 @save_ids = settings['engagement_settings']['save_ids']
-		 @request_resources = settings['engagement_settings']['request_resources']
-		 @save_api_responses = settings['engagement_settings']['save_api_responses']
-
-	  rescue
-		 puts "Error loading settings. Check settings."
-	  end
-
-	  #Create folders if they do not exist.
-	  if (!File.exist?(@inbox))
-		 Dir.mkdir(@inbox)
-	  end
-
-	  if (!File.exist?("#{@inbox}/processed"))
-		 Dir.mkdir("#{@inbox}/processed")
-	  end
-
-	  if (!File.exist?(@outbox))
-		 Dir.mkdir(@outbox)
-	  end
-
-	  if @name_based_folders
-
-		 if (!File.exist?("#{@outbox}/#{@name}"))
-			Dir.mkdir("#{@outbox}/#{@name}")
-		 end
-
-		 if (!File.exist?("#{@outbox}/#{@name}/metrics"))
-			Dir.mkdir("#{@outbox}/#{@name}/metrics")
-		 end
-
-		 @outbox = "#{@outbox}/#{@name}"
-
-	  else
-		 if (!File.exist?("#{@outbox}/metrics"))
-			Dir.mkdir("#{@outbox}/metrics")
-		 end
-	  end
-
-   end
-
-
-=begin | By Tweet results that determine Top tweets.
-{
-    "by_tweet_type": {
-        "657814465384071168": {
-            "engagements": "0",
-            "impressions": "24884"
-        },
-        "658837741438799873": {
-            "engagements": "0",
-            "impressions": "24905"
-        }
-    }
-}
-=end
 
    def manage_totals(type, count, top_tweets)
 
@@ -558,13 +556,16 @@ class EngagementClient
 	  end
    end
 
-
+   #This method: 
+   # + knows to exclude time-series Engagement Groupings from /totals requests.
+   # + knows that the /totals endpoint supports a subset of Engagement Types.
+   # +  
+   
    def assemble_request(tweets_of_interest)
 
 	  request = {}
 
 	  request['tweet_ids'] = tweets_of_interest
-
 
 	  if @endpoint == 'historical'
 		 request['start'] = @utils.get_ISO_date_string(@utils.get_date_object(@start_date)) unless @start_date.nil?
@@ -590,20 +591,34 @@ class EngagementClient
 	  end
 
 	  #Assemble groupings section.
-	  request['groupings'] = {}
-
+  	  request['groupings'] = {}
 	  @groupings.each do |key, items|
-		 request['groupings'][key] = {}
-		 request['groupings'][key]['group_by'] = []
-		 items.each do |item|
-			request['groupings'][key]['group_by'] << item
-		 end
+		 
+		 
+		 if @endpoint == 'totals'
+
+		    if !items.include? 'engagement.hour' and !items.include? 'engagement.day'
+			   request['groupings'][key] = {}
+			   request['groupings'][key]['group_by'] = []
+			   items.each do |item|
+			   		request['groupings'][key]['group_by'] << item
+   			   end
+			else
+			   AppLogger.log_info "Not adding time-series grouping to /totals request"
+			   @groupings = @groupings.tap { |h| h.delete(key)}
+		    end
+		 else
+			request['groupings'][key] = {}
+			request['groupings'][key]['group_by'] = []
+			items.each do |item|
+			   request['groupings'][key]['group_by'] << item
+			end
+	     end
 	  end
 
 	  request.to_json
 
    end
-
 
    def remove_unowned_tweets_from_request(request, error_msg)
 
@@ -700,7 +715,6 @@ class EngagementClient
 	  end
 
    end
-
 
    #=====================================================================================================================
    # Called once when client app is started.
@@ -802,7 +816,6 @@ class EngagementClient
 			
 		 rescue
 			AppLogger.log_error "ERROR occurred, skipping request."
-
 		 end
 	  end
 	  
@@ -814,7 +827,6 @@ class EngagementClient
 
    end
 
-
    def files_to_ingest?
 	  files_to_ingest = false
 	  #Do we have files to process?
@@ -824,7 +836,6 @@ class EngagementClient
 	  files_to_ingest = true if files.length > 0
 	  files_to_ingest
    end
-
 
    def load_ids
 
@@ -852,7 +863,6 @@ class EngagementClient
 
 	  metadata[id_type]
    end
-
 
 end
 
