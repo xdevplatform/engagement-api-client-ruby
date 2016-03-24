@@ -1,56 +1,55 @@
 #Engagement API ------------------------
 engagement_settings:
-  name: test   #Session name for data set, used to label output.
-  endpoint: historical    #options: totals, 28hr, historical.
-  inbox: ./inbox #Tweet inbox (HPT gz files? Search JSON?, CSV database dump?)
-  outbox: ./outbox     #Engagement API output is written here.
-  name_based_folders: true
-  max_top_tweets: 10                 #Set to zero to turn 'top Tweet' processing off.
-  start: 201603021200                   #historical endpoint, defaults to now - 28 days.
-  #end: 2015-12-10                     #historical endpoint, defaults to now.
-  save_ids: false                      #TODO: Not implemented yet.
-  save_api_responses: true            #Saves Engagement API responses to a 'api_responses' subfolder of the 'outbox'.
-  verbose: true                       #More status fyi written to system out while running.
-  rate_limit_requests: 60           #Set these to help avoid request rate limits.
-  rate_limit_seconds: 60              #Time between calls equals rate_limit_seconds/rate_limit_requests (60/4 = 15) seconds.
+  name: my-metrics-data           #Session name for data set, used to label output.
+  endpoint: historical            #options: totals, 28hr, historical.
+  inbox: ./inbox                  #Tweet inbox (HPT gz files? Search JSON?, CSV database dump?)
+  outbox: ./outbox                #Engagement API output is written here.
+  name_based_folders: true        #Build folder and file names based on 'name'.
+  max_top_tweets: 10              #Set to zero to turn 'top Tweet' processing off.
+  start: 201603021200             #(UTC) for /historical endpoint, defaults to now - 28 days, or 'end' - 28 days..
+  #end:                           #(UTC) for /historical endpoint, defaults to now, or 'start' + 28 days.
+  save_api_responses: tru         #Saves Engagement API responses to a 'api_responses' subfolder of the 'outbox'.
+  verbose: true                   #More status fyi written to system out while running.
+  rate_limit_requests: 2          #Set these to help avoid request rate limits.
+  rate_limit_seconds: 60          #Time between calls equals rate_limit_seconds/rate_limit_requests (60/4 = 15) seconds.
 
-engagement_types: #iorder here is echoed in output.
+engagement_types: #Order here is echoed in output.
   impressions: true
   engagements: true
-  favorites: true
   retweets: true
+  favorites: true
   replies: true
-  url_clicks: false
-  hashtag_clicks: false
+  url_clicks: true
+  email_tweet: true
+  user_follows: true
+  user_profile_clicks: true
+  hashtag_clicks: true
+  video_views: false
   detail_expands: false
   media_clicks: false
   permalink_clicks: false
   app_opens: false
   app_install_attempts: false
-  email_tweet: false
-  
+
 engagement_groupings:
   by_type:  #Grand totals.
     - engagement.type
   by_tweet_type: #Needed for surfacing Top Tweets. I.e., the 'top Tweet' code depends on this specific API output.
     - tweet.id
     - engagement.type
-# hourly_timeseries:
-#   - engagement.type
-#   - tweet.id
-#   - engagement.hour
-#  by_tweet:
-#  - tweet.id
-#  by_tweet_type:
-#  - tweet.id
-#  - engagement.type
-#  by_day_type:
-#  - engagement.day
-#  - engagement.type
-#  by_type_day_tweet:
-#  - engagement.type
-#  - engagement.day
-#  - tweet.id
+  timeseries_hourly:
+    - tweet.id
+    - engagement.type
+    - engagement.day
+    - engagement.hour
+  timeseries_daily:
+    - tweet.id
+    - engagement.type
+    - engagement.day
+  hour_of_day:
+    - tweet.id
+    - engagement.type
+    - engagement.hour
 
 logging:
   name: engagement_app.log
