@@ -432,14 +432,17 @@ If you submit a unowned Tweet ID (a Tweet that you do not have permission for), 
 
 This client can output the series of Engagement API responses and also a 'Results' CSV file containing grand totals and a sorted 
 list of Top Tweets: 
-	+ API responses are written to an ```api_responses``` outbox subfolder if the ```app_settings.yaml``` ```save_api_responses:``` option is set to true. [TODO] 
-	+ The CSV files are written to the 'outbox' folder indicated in the app_settings.yaml file. 
+
++ API responses are written to an ```api_responses``` outbox subfolder if the ```app_settings.yaml``` ```save_api_responses:``` option is set to true. [TODO] 
++ The CSV files are written to the 'outbox' folder indicated in the app_settings.yaml file. 
 
 #### API Responses <a id="api-responses" class="tall">&nbsp;</a>
 
-As the Client makes its series of API requests, it writes the API JSON responses to the ```[outbox]/api_responses``` directory, where [outbox] is the output folder specified by the ```outbox:``` app setting. These results files are numerically serialized as ```results_1.json```, ```results_2.json```, etc. as necessary. 
+As the Client makes its series of API requests, it writes the API JSON responses to the ```[outbox]/[name]/metrics``` directory, where 
 
-[TODO: add some naming mechanism for producing result sets based on name?]
++ [outbox] is the output folder specified by the ```outbox:``` app setting. 
++ [name] is the dataset name specified by the ```name:``` app setting. 
++ These results files are numerically serialized as ```[name]_metrics.json```, ```[name]_metrics_1.json```, ```[name]_metrics_2.json```, etc. as necessary. 
 
 #### Top Tweets <a id="top-tweets" class="tall">&nbsp;</a>
 
@@ -501,11 +504,6 @@ The following 'Top Tweets' JSON is generated:
 ```
 
 
-
-
-
-
-
 As output the above JSON is formatted as a CSV file with sorted list with clickable links:
 
 ```
@@ -543,8 +541,6 @@ Top Tweets for engagements:,engagements,Tweet links:
 0,0,https://twitter.com/lookup/status/0
 0,0,https://twitter.com/lookup/status/0
 ```
-
-
 
 ### Specifying Start and End Times for Historical Requests <a id="specifying-times" class="tall">&nbsp;</a>
 

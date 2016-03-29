@@ -31,7 +31,7 @@ engagement_types: #Order here is echoed in output.
   app_opens: false
   app_install_attempts: false
 
-engagement_groupings:
+engagement_groupings:  
   by_type:  #Grand totals.
     - engagement.type
   by_tweet_type: #Needed for surfacing Top Tweets. I.e., the 'top Tweet' code depends on this specific API output.
