@@ -8,7 +8,7 @@ engagement_settings:
   max_top_tweets: 10              #Set to zero to turn 'top Tweet' processing off.
   start: 201603021200             #(UTC) for /historical endpoint, defaults to now - 28 days, or 'end' - 28 days..
   #end:                           #(UTC) for /historical endpoint, defaults to now, or 'start' + 28 days.
-  save_api_responses: tru         #Saves Engagement API responses to a 'api_responses' subfolder of the 'outbox'.
+  save_api_responses: true       #Saves Engagement API responses to a 'api_responses' subfolder of the 'outbox'.
   verbose: true                   #More status fyi written to system out while running.
   rate_limit_requests: 2          #Set these to help avoid request rate limits.
   rate_limit_seconds: 60          #Time between calls equals rate_limit_seconds/rate_limit_requests (60/4 = 15) seconds.
