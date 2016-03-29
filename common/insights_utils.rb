@@ -46,7 +46,7 @@ class InsightsUtils
 		 end
 
 		 File.readlines(file).drop(1).each do |line|
-			ids << line.strip.to_i
+			ids << line.strip.to_i if not line.strip! == ''
 		 end
 
 		 #Move file to 'processed' folder
