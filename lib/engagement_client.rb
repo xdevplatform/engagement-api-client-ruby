@@ -14,7 +14,7 @@ class EngagementClient
    MAX_TWEETS_PER_REQUEST_HISTORICAL = 25
    MAX_HISTORICAL_DAYS = 28
    TOTALS_ENGAGEMENT_TYPES = ['retweets', 'favorites', 'replies']
-   HISTORICAL_METRIC_DATE_LIMIT = '2015-09-01' #Before which ['retweets', 'favorites', 'replies'] are not available.
+   HISTORICAL_METRIC_DATE_LIMIT = '2015-09-15' #Before which ['retweets', 'favorites', 'replies'] are not available.
 
    REQUEST_SLEEP_IN_SECONDS = 10 #Sleep this long with hitting request rate limit.
 
