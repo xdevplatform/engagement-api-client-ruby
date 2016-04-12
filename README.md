@@ -574,11 +574,14 @@ Start ```-s``` and end ```-e``` parameters can be specified in a variety of ways
 There are four Ruby files associated with this client (subject to change due to refactoring and more attention to "separating concerns"): 
 + engagement_app.rb: <a id="engagement-app" class="tall">&nbsp;</a>
     + Creates one instance of the EngagementClient (engagement_client.rb) class. 
-    + Manages configuration files, command-line options and application session logic. Examples of these work session include:
-        + Confirming there are Tweet IDs to process.
-	+ Calling the client's 'manage_process' method.    
+    + Manages configuration files, command-line options and application session logic. This app starts up, works through a 'session', then exits.
+    + A 'session' consists of:
+    	+ Parsing input files (Tweet collection or a simple ID list).
+    	+ Manages as many API calls as neccessary by calling Engagement Client's `manage_process' method. 
+    	+ Compiles Top Tweets as responses are received.
+    	+ Generates a results summary.
     + Start here if you are adding/changing command-line details. 
-    + No API requests are made directly from app.
+    + No API requests are made directly from app. This app doesn't care how the HTTP details are implemented.
 
 + /lib/engagement_client.rb <a id="engagement-client" class="tall">&nbsp;</a>
     + The intent here is to have this class encapsulate all the low-level understanding of exercising the Engagement API.
@@ -591,7 +594,7 @@ There are four Ruby files associated with this client (subject to change due to 
         + TOTALS_ENGAGEMENT_TYPES = ['favorites', 'replies', 'retweets']
       
     + This class has and manages the following attributes:
-        + A single array of Tweet IDs.    
+        + A single array of Tweet IDs. (The insights_utils module knows the details of producing the array).   
         + HTTP endpoint details.
         + A single set of app keys and access tokens.
         + Settings that map to the app_settings.yaml file.
@@ -599,7 +602,7 @@ There are four Ruby files associated with this client (subject to change due to 
 + /common/insights_utils.rb <a id="insights-utils" class="tall">&nbsp;</a>
     + A 'utilities' helper class with methods common to both Insights APIs, Audience and Engagement.
     + Where all extacting of IDs happens... Adding a new Tweet/User IDs file type? Add a method here.
-    + Code here can be shared with other Insights API clients, such as the Audience API client.
+    + Code here is shared with other Insights API clients, such as the Audience API client.
 
 + /common/app_logger.rb <a id="app-logger" class="tall">&nbsp;</a>
     + A singleton module that provides a basic logger. The above scripts/classes reference the AppLogger module.
