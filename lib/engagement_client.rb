@@ -2,6 +2,7 @@ require 'json'
 require 'yaml'
 require 'csv'
 require 'zlib'
+require 'stringio'
 
 require 'oauth'
 require_relative '../common/insights_utils'
@@ -200,13 +201,17 @@ class EngagementClient
 
 		 @@request_num += 1
 		 AppLogger.log_info "Client making API request: #{request[0..80]}"
-		 result = @api.post(uri_path, request, {"content-type" => "application/json"})
+		 result = @api.post(uri_path, request, {"content-type" => "application/json", "Accept-Encoding" => "gzip"})
+		 
+		 #Unzip result body, which is gzip.
+		 gz = Zlib::GzipReader.new( StringIO.new( result.body ) )
+		 result.body = gz.read
 
 		 if result.code.to_i > 201
 			handle_response_error(result)
 		 end
 
-		 result.body
+         result.body
 	  rescue
 		 AppLogger.log_error "Error making POST request. "
 	  end
