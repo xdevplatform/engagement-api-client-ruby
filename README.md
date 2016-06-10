@@ -86,12 +86,12 @@ For this example we'll take a look at the Retweet, Replies, and Favorites metric
 + Configure the Client:
     + Name the dataset 'Gnip': -n Gnip
     + Specify the 'totals' endpoint: -p totals
-    + Configure the Engagement Types and Groupings.
+    + Configure the Engagement Types and Groupings. These are configured in the app_settings.yaml file. See [HERE](http://support.gnip.com/apis/engagement_api/overview.html#EngagementTypes) for a list of available Types and [HERE](http://support.gnip.com/apis/engagement_api/overview.html#EngagementGroupings) for how the metrics can be grouped.
     + Specify the number of top Tweets to surface: ```max_top_tweets: 3```
 + Run the Client app: $ruby engagement_app.rb -n Gnip -p totals
-+ Look in the outbox for the Engagement API results:
++ Look in the outbox for the Engagement API results
     
-Two types of files are generated: ```Gnip_results.csv``` and ```Gnip_metrics.json```. These are written to a ```Gnip``` subfolder of your configured inbox. Since some data sets may produce a large number of API metric responses, the ```_metrics.json``` files are written to a ```metrics``` subfolder, and the file names are numerically serialized.
+Two types of files are generated: ```Gnip_results.csv``` and ```Gnip_metrics.json```. These are written to a ```Gnip``` subfolder (automatically created and named based on the dataset name) of your configured inbox. Since some data sets may produce a large number of API metric responses, the ```_metrics.json``` files are written to a ```metrics``` subfolder, and the file names are numerically serialized.
  
 Here are the contents of the Gnip_results.csv file:
 
