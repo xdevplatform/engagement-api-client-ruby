@@ -2,7 +2,7 @@ require 'optparse'
 require 'fileutils'
 
 require_relative './common/app_logger'
-require_relative './lib/engagement_client'
+require_relative './tools/engagement_tool'
 
 if __FILE__ == $0 #This script code is executed when running this file.
 
@@ -44,10 +44,7 @@ if __FILE__ == $0 #This script code is executed when running this file.
    if ($settings.nil?) then
 	  $settings = './config/app_settings.yaml'
    end
-
-   Client = EngagementClient.new()
-   Client.set_account_config($account)
-   Client.set_settings_config($settings)
+   Client = EngagementTool.new()
    Client.verbose = true if !$verbose.nil?
 
    AppLogger.config_file = $settings
@@ -56,7 +53,8 @@ if __FILE__ == $0 #This script code is executed when running this file.
    AppLogger.set_logger
    AppLogger.log_info("Starting process at #{Time.now}")
 
-   Client.get_api_access #Set-up access object? Confirm authentication?
+   Client.set_account_config($account)
+   Client.set_settings_config($settings)
 
    #Now that we know Engagement Type configuration, build 'top tweet' hash.
    Client.top_tweets = Client.build_top_tweets_hash if Client.max_top_tweets > 0
