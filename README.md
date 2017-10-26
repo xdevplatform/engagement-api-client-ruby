@@ -501,12 +501,14 @@ The following 'Top Tweets' JSON is generated:
     }
   ]
 }
+
 ```
 
 
 As output the above JSON is formatted as a CSV file with sorted list with clickable links:
 
-```
+
+
 Engagement API Results
 
 Number of Tweets: 320
@@ -535,12 +537,8 @@ Top Tweets for engagements:,engagements,Tweet links:
 663581045829144576,2,https://twitter.com/lookup/status/663581045829144576
 649987151887667200,1,https://twitter.com/lookup/status/649987151887667200
 662432052344659968,1,https://twitter.com/lookup/status/662432052344659968
-0,0,https://twitter.com/lookup/status/0
-0,0,https://twitter.com/lookup/status/0
-0,0,https://twitter.com/lookup/status/0
-0,0,https://twitter.com/lookup/status/0
-0,0,https://twitter.com/lookup/status/0
-```
+
+
 
 ### Specifying Start and End Times for Historical Requests <a id="specifying-times" class="tall">&nbsp;</a>
 
@@ -616,7 +614,7 @@ There are four Ruby files associated with this client (subject to change due to 
 
 ### License
 
-Copyright 2016 Twitter, Inc. and contributors.
+Copyright 2017 Twitter, Inc. and contributors.
 
 Licensed under the MIT License: https://opensource.org/licenses/MIT
 
