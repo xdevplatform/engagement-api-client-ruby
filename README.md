@@ -410,7 +410,8 @@ A first step for making Engagement API requests is compiling a collection of Twe
 	+ [GET search/tweets](https://dev.twitter.com/rest/reference/get/search/tweets)
 + Simple text files with one Tweet ID per line. Tweet IDs stored in a database can easily be exported into such a file.
     + Format example:
-    ```
+
+```
 tweet_ids
 663581045829144576
 663194656000217088
@@ -504,10 +505,9 @@ The following 'Top Tweets' JSON is generated:
 
 ```
 
-
 As output the above JSON is formatted as a CSV file with sorted list with clickable links:
 
-
+```
 
 Engagement API Results
 
@@ -538,6 +538,7 @@ Top Tweets for engagements:,engagements,Tweet links:
 649987151887667200,1,https://twitter.com/lookup/status/649987151887667200
 662432052344659968,1,https://twitter.com/lookup/status/662432052344659968
 
+```
 
 
 ### Specifying Start and End Times for Historical Requests <a id="specifying-times" class="tall">&nbsp;</a>
