@@ -761,6 +761,8 @@ class EngagementClient
 	  results['continue'] = true
 
 	  rate_limit_pause = @rate_limit_seconds/@rate_limit_requests
+
+	  AppLogger.log_info "Max Top Tweets #{@max_top_tweets} Rate Limit Pause #{rate_limit_pause}"
 		
 	  start_process = Time.now
 	  
@@ -792,6 +794,7 @@ class EngagementClient
 				  end
 
 				  manage_top_tweets(results['response']) unless (@max_top_tweets == 0 or !results['errors'].nil?)
+				  duration = Time.now - start_request
 
 				  if @tweets_of_interest.count > 1
 			    	 AppLogger.log_info "Sleeping #{format('%.02f', rate_limit_pause - duration)} seconds before next API request... " if duration < rate_limit_pause
