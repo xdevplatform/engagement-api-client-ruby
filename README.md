@@ -179,7 +179,7 @@ So, if you are using different file names and paths, you can specify them with t
 + ```account.yaml```: contains OAuth details, including API consumer keys for a Twitter App that has been provided access to
 the Engagement API. The Engagement API requires 3-legged authorization for all endpoints. Twitter must approve your client application before you can access the API.  
 
-Twitter apps can be created at http://dev.twitter.com/apps. When you create an App it will be assigned a numeric App ID. Once an App is created you can generate consumer keys and secrets. To obtain access to the Engagement API, contact your Gnip Account representative or reach out to info@gnip.com to start the process. Access tokens are provided by and on behalf of a Twitter account giving permission to access Tweet Engagement metadata for Tweets it 'owns.' So if you are getting engagement metrics on the behalf of others, you will be managing a set of those access tokens when authenticating with the API. 
+Twitter apps can be created at http://dev.twitter.com/apps. When you create an App it will be assigned a numeric App ID. Once an App is created you can generate consumer keys and secrets. To obtain access to the Engagement API, contact your Twitter Account representative to start the process. Access tokens are provided by and on behalf of a Twitter account giving permission to access Tweet Engagement metadata for Tweets it 'owns.' So if you are getting engagement metrics on the behalf of others, you will be managing a set of those access tokens when authenticating with the API. 
 
 ```
 #OAuth tokens and key for Audience API.
