@@ -31,9 +31,8 @@
 
 ### Overview <a id="overview" class="tall">&nbsp;</a>
 
-The Engagement API provides access to organic engagement metrics, enabling publishers, advertisers, and brands to retrieve metrics around their organic engagement and reach. These metrics can be used to assess engagements and impressions around Tweets and Retweets. See http://support.gnip.com/apis/engagement_api/ for API documentation.
-
-The Engagement API is a member of the [Gnip Insights APIs](https://blog.twitter.com/2015/gnip-insights-apis). See [HERE](https://github.com/twitterdev/audience-api-client-ruby) (soon!) if you are interested in a related example client for the [Audience API] (http://support.gnip.com/apis/audience_api/). 
+The Engagement API provides access to organic engagement metrics, enabling publishers, advertisers, and brands to retrieve metrics around their organic engagement and reach. These metrics can be used to assess engagements and impressions around Tweets and Retweets. The Engagement API is a member of the [Twitter Insights APIs](https://blog.twitter.com/2015/gnip-insights-apis). 
+See the [Engagement API Overview] (https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for API documentation.
 
 This example Engagement API Client helps manage the process of generating engagement metadata for large (or small!) Tweet collections. The Client ingests Tweet ID collections, generates and manages a series of API requests, and helps organize the engagement metrics into grand totals while surfacing 'top' Tweets.  
 
@@ -41,7 +40,7 @@ The Engagement API requires 3-legged OAuth authentication. Signing a request req
 
 This Client provides the following 'helper' methods and features:
 
-+ Extracting Tweet IDs from a variety of sources. These sources include Gnip [Full-Archive Search](http://support.gnip.com/apis/search_full_archive_api/), [30-Day Search](http://support.gnip.com/apis/search_api/), or [Historical PowerTrack](http://support.gnip.com/apis/historical_api/) products, [several Twitter Public API endpoints](#twitter-public-endpoints), and simple CSV files. 
++ Extracting Tweet IDs from a variety of sources. These sources include the Twitter [Full-Archive Search and 30-day Search APIs](https://developer.twitter.com/en/docs/twitter-api/enterprise/search-api/overview) or [Historical PowerTrack](https://developer.twitter.com/en/docs/twitter-api/enterprise/historical-powertrack-api/overview) products, [several Twitter Public API endpoints](#twitter-public-endpoints), and simple CSV files. 
 + Surfacing ['Top Tweets.'](#top-tweets) As engagement metrics are retrieved, on a Tweet-by-Tweet basis, this client maintains a list of 'Top Tweets' with the highest levels of engagement. For example, if you are processing 100,000 Tweets, it can compile the top 10 for Retweets or any other available metric.
 + Support for managing Engagement metric data sets. A name can be specified for each run and the resulting summary and metric response JSON files are assigned that name and placed in a folder with the name. This helps keep your various data sets organized.   
 + Handling unowned Tweets. If you make a request containing an unowned Tweet ID, the API will reject the entire request, even if all the other IDs are owned. If this occurs the Client will remove any unowned IDs and resubmit the request.
@@ -57,7 +56,7 @@ As a Gnip customer who is adopting the Engagement API:
 		+ Some Tweet collections may require hundreds or thousands of API requests.
 
 + I have collections of Tweet IDs and want to easily retrieve engagement metrics for them. These collections consist of:
-    + Tweets collected with a Gnip Product such as [Full-Archive Search](http://support.gnip.com/apis/search_full_archive_api/), [30-Day Search](http://support.gnip.com/apis/search_api/), or [Historical PowerTrack](http://support.gnip.com/apis/historical_api/).
+    + Tweets collected with a Gnip Product such as [Full-Archive and 30-day Search](https://developer.twitter.com/en/docs/twitter-api/enterprise/search-api/overview) or [Historical PowerTrack](https://developer.twitter.com/en/docs/twitter-api/enterprise/historical-powertrack-api/overview).
         + If extracting IDs from Tweets, the Client handles both 'original' and Activity Stream Tweet formats.
     + Tweets returned from the Twitter Public API, such as [GET statuses/lookup](https://dev.twitter.com/rest/reference/get/statuses/lookup).
     + A simple CSV file generated from a datastore.
@@ -82,11 +81,11 @@ An endpoint can be specified in the client's configuration, or passed in via the
 For this example we'll take a look at the Retweet, Replies, and Favorites metrics for all of the @Gnip Tweets since September 1, 2014. While collecting this metric data, we want to identify the top 3 tweets in these metric categories. The first step is to have the @Gnip account owner provide access tokens providing access to Engagement metrics for their Tweets. With those tokens the steps are:
 
 + Configure the account.yaml file with tokens.
-+ Compile the Tweets to be analyzed. For this exercise, this [Full-Archive Search (FAS) client](https://github.com/gnip/gnip-fas-ruby) was used. JSON responses from the FAS API were written to the Client's inbox, consisting of 138 Tweets. 
++ Compile the Tweets to be analyzed. For this exercise, this [Full-Archive Search (FAS) client](https://github.com/twitterdev/search-tweets-ruby) was used. JSON responses from the FAS API were written to the Client's inbox, consisting of 138 Tweets. 
 + Configure the Client:
     + Name the dataset 'Gnip': -n Gnip
     + Specify the 'totals' endpoint: -p totals
-    + Configure the Engagement Types and Groupings. These are configured in the app_settings.yaml file. See [HERE](http://support.gnip.com/apis/engagement_api/overview.html#EngagementTypes) for a list of available Types and [HERE](http://support.gnip.com/apis/engagement_api/overview.html#EngagementGroupings) for how the metrics can be grouped.
+    + Configure the Engagement Types and Groupings. These are configured in the app_settings.yaml file. See the ["Available metrics" section of Enagement API overviewE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for a list of available Types and [HERE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/guides/grouping-results) for how the metrics can be grouped.
     + Specify the number of top Tweets to surface: ```max_top_tweets: 3```
 + Run the Client app: $ruby engagement_app.rb -n Gnip -p totals
 + Look in the outbox for the Engagement API results
@@ -269,7 +268,7 @@ Note: the ```/totals``` endpoint currently supports Retweets, Replies and Favori
 
 ##### Engagement Groupings <a id="engagement-groupings" class="tall">&nbsp;</a>
 
-Each Engagement API request requires a ```groupings:``` JSON attribute with up to ten custom metric groupings. These groupings enable you to receive engagement data organized the way you want. Each Grouping is specified under a custom name, and API returns JSON with those custom names as attributes. For more details on specifying the Engagement Groupings see the [Engagement API documentation](http://support.gnip.com/apis/engagement_api/api_reference.html). [TODO: update link to new subject anchor]
+Each Engagement API request requires a ```groupings:``` JSON attribute with up to ten custom metric groupings. These groupings enable you to receive engagement data organized the way you want. Each Grouping is specified under a custom name, and API returns JSON with those custom names as attributes. For more details on specifying the Engagement Groupings see the [Engagement API documentation](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/guides/grouping-results). [TODO: update link to new subject anchor]
 
 Custom Groupings are specified the ```engagement_groupings:``` key in the app settings YAML file: 
 
@@ -403,7 +402,7 @@ Here are some command-line examples to help illustrate how they work:
 A first step for making Engagement API requests is compiling a collection of Tweet IDs. This client is designed to ingest Tweet IDs from several sources:
 
 + [Gnip Historical PowerTrack](http://support.gnip.com/apis/historical_api/) files. These JSON files can be gzipped or uncompressed.
-+ JSON responses from either of Gnip's Search products: [30-Day](http://support.gnip.com/apis/search_api/) or [Full-Archive](http://support.gnip.com/apis/search_full_archive_api/).
++ JSON responses from either of these search endpoints: [30-Day or Full-Archive](https://developer.twitter.com/en/docs/twitter-api/enterprise/search-api/overview).
 + Responses from the Twitter Public API<a id="twitter-public-endpoints" class="tall">&nbsp;</a>. Output from the following Public Endpoints have response formats that have been tested with this client: 
 	+ [GET statuses/lookup](https://dev.twitter.com/rest/reference/get/statuses/lookup) 
 	+ [GET statuses/user_timeline](https://dev.twitter.com/rest/reference/get/statuses/user_timeline)
@@ -615,7 +614,7 @@ There are four Ruby files associated with this client (subject to change due to 
 
 ### License
 
-Copyright 2017 Twitter, Inc. and contributors.
+Copyright 2021 Twitter, Inc. and contributors.
 
 Licensed under the MIT License: https://opensource.org/licenses/MIT
 
