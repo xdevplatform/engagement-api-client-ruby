@@ -67,7 +67,7 @@ As a Gnip customer who is adopting the Engagement API:
 
 ### API Endpoints <a id="api-endpoints" class="tall">&nbsp;</a>
 
-As described [HERE](http://support.gnip.com/apis/engagement_api/overview.html), there are 3 Engagement API endpoints:
+As described [HERE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview), there are 3 Engagement API endpoints:
 
 An endpoint can be specified in the client's configuration, or passed in via the -p command-line parameter. 
 
