@@ -32,7 +32,7 @@
 ### Overview <a id="overview" class="tall">&nbsp;</a>
 
 The Engagement API provides access to organic engagement metrics, enabling publishers, advertisers, and brands to retrieve metrics around their organic engagement and reach. These metrics can be used to assess engagements and impressions around Tweets and Retweets. The Engagement API is a member of the [Twitter Insights APIs](https://blog.twitter.com/2015/gnip-insights-apis). 
-See the [Engagement API Overview] (https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for API documentation.
+See the [Engagement API Overview](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for API documentation.
 
 This example Engagement API Client helps manage the process of generating engagement metadata for large (or small!) Tweet collections. The Client ingests Tweet ID collections, generates and manages a series of API requests, and helps organize the engagement metrics into grand totals while surfacing 'top' Tweets.  
 
@@ -85,7 +85,7 @@ For this example we'll take a look at the Retweet, Replies, and Favorites metric
 + Configure the Client:
     + Name the dataset 'Gnip': -n Gnip
     + Specify the 'totals' endpoint: -p totals
-    + Configure the Engagement Types and Groupings. These are configured in the app_settings.yaml file. See the ["Available metrics" section of Enagement API overviewE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for a list of available Types and [HERE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/guides/grouping-results) for how the metrics can be grouped.
+    + Configure the Engagement Types and Groupings. These are configured in the app_settings.yaml file. See the ["Available metrics" section of Enagement API overview](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/overview) for a list of available Types and [HERE](https://developer.twitter.com/en/docs/twitter-api/enterprise/engagement-api/guides/grouping-results) for how the metrics can be grouped.
     + Specify the number of top Tweets to surface: ```max_top_tweets: 3```
 + Run the Client app: $ruby engagement_app.rb -n Gnip -p totals
 + Look in the outbox for the Engagement API results
